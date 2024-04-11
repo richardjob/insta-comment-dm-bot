@@ -68,7 +68,7 @@ app.get("/", (req, res) => {
 // Comment DM
 app.post("/", async (req, res) => {
   const username = req.body.entry[0].changes[0].value.from.username;
-  const comment = req.body.entry[0].changes[0].text;
+  const comment = req.body.entry[0].changes[0].value.text;
 
   const followersFeed = ig.feed.accountFollowers(ig.state.cookieUserId);
   const followers = await getAllItemsFromFeed(followersFeed);
@@ -82,12 +82,17 @@ app.post("/", async (req, res) => {
 
     if (comment.toLowerCase().includes("voucher")) {
       message = "Google.com";
+      await thread.broadcastText("message");
+      console.log(`Message Sent to ${username}`);
     } else if (comment.toLowerCase().includes("redeem code")) {
       message = "Code.com";
+      await thread.broadcastText("message");
+      console.log(`Message Sent to ${username}`);
+    } else {
+      console.log(`Message Not Sent to ${username}`);
     }
 
-    await thread.broadcastText("message");
-    console.log(`Message Sent to ${username}`);
+    
   } else {
     console.log(`${username} is Not a Follower`);
   }
@@ -102,4 +107,6 @@ async function getAllItemsFromFeed(feed) {
   return items;
 }
 
-module.exports = app;
+app.listen(process.env.PORT, ()=>{
+  console.log("Server Started at PORT: " + process.env.PORT);
+})
