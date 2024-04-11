@@ -105,3 +105,5 @@ async function getAllItemsFromFeed(feed) {
 app.listen(process.env.PORT, ()=>{
   console.log(`Server Started at: ${process.env.PORT}`);
 })
+
+module.exports = app;
